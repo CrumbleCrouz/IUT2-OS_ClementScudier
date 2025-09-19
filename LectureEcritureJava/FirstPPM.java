@@ -4,7 +4,7 @@ import java.io.IOException;
 public class FirstPPM {
     public static void main(String[] args) {
         try {
-            FileWriter writer = new FileWriter("FirstPPM.ppm");
+            FileWriter writer = new FileWriter("LectureEcritureJava/out/FirstPPM.ppm");
 
             writer.write("P3\n");
             writer.write("3 2\n");

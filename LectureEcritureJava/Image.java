@@ -1,5 +1,5 @@
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.Scanner;
 
 public class Image {
     private int width;
@@ -34,7 +34,6 @@ public class Image {
      * Sauvegarde l'image au format texte PPM (P3)
      */
     public void save(String filename) throws IOException {
-        //TODO: Fix the problem writing the data
         FileWriter writer = new FileWriter("LectureEcritureJava/out/" +  filename);
         writer.write("P3\n");
         writer.write(width + " " + height + "\n");
@@ -46,10 +45,30 @@ public class Image {
                     writer.write(" ");
                 }
             }
-            if  (y != height - 1) {
-                writer.write("\n");
-            }
+            writer.write("\n");
         }
         writer.close();
+    }
+
+    public static void read_txt(String filename) throws IOException {
+        FileInputStream fileInputStream = new FileInputStream(filename);
+        Scanner sc = new Scanner(fileInputStream);
+        String line;
+        String[] header = new String[3];
+        String[] data = {}; // Compilator validator
+        int i = 0;
+        while (sc.hasNextLine()) {
+            line = sc.nextLine();
+            System.out.println(line);
+            if (i < 3) {
+                header[i] = line;
+            } else {
+                if (i == 3) {
+                    data = new String[Integer.parseInt(header[1].split(" ")[1])];
+                }
+                data[i - 3] = line;
+            }
+            i++;
+        }
     }
 }
