@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Image {
@@ -48,6 +49,25 @@ public class Image {
             writer.write("\n");
         }
         writer.close();
+    }
+
+
+    /**
+     * Sauvegarde l'image au format binaire PPM (P3)
+     */
+    public void save_bin(String filename) throws IOException {
+        FileOutputStream fos = new FileOutputStream("LectureEcritureJava/out/bin_" + filename);
+        fos.write("P6\n".getBytes());
+        fos.write((width + " " + height + "\n").getBytes());
+        fos.write("255\n".getBytes());
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                fos.write((byte) pixels[y][x][0]);
+                fos.write((byte) pixels[y][x][1]);
+                fos.write((byte) pixels[y][x][2]);
+            }
+        }
+        fos.close();
     }
 
     public static void read_txt(String filename) throws IOException {
