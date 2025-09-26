@@ -1,3 +1,5 @@
+package SystemeFichiersVirtuel;
+
 import java.io.*;
 
 public class MemoryManager {
@@ -16,10 +18,10 @@ public class MemoryManager {
     public static final int MAX_INODES = INODE_TABLE_SIZE / INODE_SIZE; // => 508
 
     // CONTRAINTE : Un seul tableau pour TOUT le système de fichiers
-    private byte[] filesystemMemory;
+    private byte[] memory;
 
     public MemoryManager() {
-        this.filesystemMemory = new byte[TOTAL_MEMORY];
+        this.memory = new byte[TOTAL_MEMORY];
         initializeFilesystem();
     }
 
@@ -36,6 +38,7 @@ public class MemoryManager {
     }
 
     private void writeSuperblock() {
+
         // Exemple minimal (tu peux stocker plus d’infos si tu veux)
         String signature = "MYFS1.0";
 
@@ -44,9 +47,24 @@ public class MemoryManager {
         // Sauvegarder les variables du systeme (block size, total memory, etc, max inodes)
         // exemple
         // new byte[] { (byte)(value >>> 24), (byte)(value >>> 16), (byte)(value >>> 8), (byte)value};
+
+        //! correction
+        // ÉTAPE 1: Écrire la signature du système
+        for (int i = 0; i < Math.min(27, data.length); i++) {
+            memory[i] = (byte) signature.charAt(i);
+        }
+
+         byte [] data = signature.getBytes();
+         System.arraycopy(data, 0, memory, 0, Math.min(27, data.length));
+
+        // ÉTAPE 2: Écrire quelques infos importantes à des positions fixes
+        Utils.writeInt(memory, 16, BLOCK_SIZE);     // Position 16: taille des blocs
+        Utils.writeInt(memory, 20, TOTAL_MEMORY);   // Position 20: taille totale
+        Utils.writeInt(memory, 24, NUM_BLOCKS);     // Position 24: nombre de blocs
+        // Possible d'utiliser System.arraycopy
     }
 
-    public boolean setBlockUsed(int blockNumber) {
+    public boolean setBlockUsed(int blockNumber, boolean used) {
         if (blockNumber < 0 || blockNumber >= NUM_BLOCKS)
             return false;
 
@@ -54,7 +72,14 @@ public class MemoryManager {
         int bitPosition = blockNumber % 8;
         int offset = BITMAP_OFFSET + byteIndex;
 
-        //! Expliquez pourquoi on utilise un décallage de bit ?
+        // INDICE: Utilisez les opérations | (OR) et & (AND) avec des masques
+        if (used) {
+            // Mettre le bit à 1 (bloc occupé)
+            memory[offset] |= (byte) (1 << bitPosition);
+        } else {
+            // Mettre le bit à 0 (bloc libre)
+            memory[offset] &= (byte) ~ (1 << bitPosition);
+        }
 
         return true;
     }
@@ -67,25 +92,40 @@ public class MemoryManager {
         int bitPosition = blockNumber % 8;
         int offset = BITMAP_OFFSET + byteIndex;
 
-        return (filesystemMemory[offset] >> bitPosition) & 1;
+        return (memory[offset] >> bitPosition) & 1;
     }
 
     public int allocateBlock() {
-        // Trouvez un block libre
-        // Dans ce cas, marqué le comme non libre
-        // Et retourner le numéro du block
+        // TODO: Complétez cette méthode étape par étape
+        // ÉTAPE 1: Boucle de la page 129 à la fin (les pages de données)
+        // ÉTAPE 2: Pour chaque page, vérifier si elle est libre
+        // ÉTAPE 3: Si libre, la marquer comme occupée
+        // ÉTAPE 4: Retourner son numéro
+
+        for (int i = 129; i < NUM_BLOCKS; i++) {
+            if (isBlockUsed(i) == 0) {  // Bloc libre trouvé !
+                setBlockUsed(i, true);
+                return i;
+            }
+        }
         return -1; // Pas de bloc libre
     }
 
-    public byte[] getFilesystemMemory() {
-        return filesystemMemory;
+    public byte[] getMemory() {
+        return memory;
     }
 
     public void saveToFile() throws IOException {
         // Complété la sauvegarde du system avec FileOutputStream
+
+        //! correction
+        FileOutputStream fos = new FileOutputStream("filesystem.img");
+        fos.write(memory);
+        fos.close();
     }
 
     public void loadFromFile() throws IOException {
         // Complété la sauvegarde du system avec FileInputStream
+        // AIDE: Utilisez FileInputStream
     }
 }

@@ -1,3 +1,5 @@
+package LectureEcritureJava;
+
 public class Gradient {
     public static void main(String[] args) {
         Image img = new Image(200, 100);
