@@ -1,5 +1,3 @@
-package SystemeFichiersVirtuel;
-
 import java.util.*;
 
 public class VirtualFileSystem {

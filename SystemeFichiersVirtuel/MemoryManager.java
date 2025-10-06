@@ -1,5 +1,3 @@
-package SystemeFichiersVirtuel;
-
 import java.io.*;
 
 public class MemoryManager {
