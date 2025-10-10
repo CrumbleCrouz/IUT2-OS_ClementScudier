@@ -27,10 +27,11 @@ public class Main {
         System.out.println("Erreur enregistrée dans : " + error.getAbsolutePath());
 
         System.out.println("\n=== Étape 3 : Processus interactif");
-        Process p4 = pc.executeInteractive("cmd", new String[]{"/k"});
-        pc.sendInput(p4, "echo Ceci est un test interactif");
+        Process p4 = pc.executeInteractive("C:/python39-32/python.exe", new String[]{""});
+        pc.sendInput(p4, "print(\"echo Ceci est un test interactif\")");
         System.out.println("Sortie interactive : " + pc.readOutput(p4));
-        pc.sendInput(p4, "exit");
+        pc.sendInput(p4, "exit()");
+//        Thread.sleep(5000);
         pc.waitForProcess(p4, 5);
 
         System.out.println("\n=== Étape 4 : Test de timeout");
