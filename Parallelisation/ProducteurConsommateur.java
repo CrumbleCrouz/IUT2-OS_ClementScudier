@@ -8,7 +8,7 @@ public class ProducteurConsommateur {
     private final Integer[] buffer = new Integer[TAILLE_BUFFER];
 
     // TODO: Déclarer 3 sémaphores avec les bonnes valeurs initiales
-    private final Semaphore placesLibres = new Semaphore(???);
-    private final Semaphore elementsDisponibles = new Semaphore(???);
-    private final Semaphore mutexBuffer = new Semaphore(???);
+//    private final Semaphore placesLibres = new Semaphore(???);
+//    private final Semaphore elementsDisponibles = new Semaphore(???);
+//    private final Semaphore mutexBuffer = new Semaphore(???);
 }

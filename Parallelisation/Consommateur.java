@@ -12,6 +12,7 @@ class Consommateur implements Runnable {
     private int genererProduit() {
         // TODO: Générer un nombre avec calcul intensif (pas de Random !)
         // Exemple : somme des carrés de 1 à 1000
+        return 1;
     }
 
     private void traiterProduit(int produit) {
