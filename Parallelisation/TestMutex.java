@@ -1,4 +1,4 @@
-public class TestCompteurSecurise {
+public class TestMutex {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("=== Compteur Dangereux ===");
